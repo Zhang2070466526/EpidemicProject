@@ -1,0 +1,111 @@
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static "css/manage_list.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        a:link {
+          text-decoration: none; /*    取消下滑线*/
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+
+{% endblock %}
+
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 3 %}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block content%}
+ <div class="g-page">
+        <div class="g-header">
+            <div class="g-header-value page-title">{{ title }}</div>
+            <div class="g-header-value sub-title">共:{{ count}}</div>
+        </div>
+
+        <div class="g-table-body">
+            <ul class="g-table-actions">
+                <li class="g-table-actions-col">
+                    <a href="/campus/base_zy/teacher_add/" class="g-actions-button g-actions-button-default">新增</a>
+                </li>
+                <li>
+                    <form class="g-forms-input" method="get">
+                        <input type="text" name="search_input" value="{{ search_data }}" class="g-forms-input-search-bar" placeholder="Search ...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"><i class="bi bi-search"></i></span>
+                            </button>
+                        </span>
+                    </form>
+                </li>
+            </ul>
+            <table cellspacing="0" class="g-table-list">
+                 <thead>
+                    <tr>
+                        <th class="g-table-list-col-edit"></th>
+                            <th class="g-table-list-col-title g-table-list-col-desc required">序号</th>
+                            {% for i in form %}
+                                <th class="g-table-list-col-title g-table-list-col-desc required">{{ i.label }}</th>
+                            {% endfor %}
+                            <th class="g-table-list-col-title g-table-list-col-desc required">操作</th>
+                        <th class="g-table-list-col-edit"></th>
+                    </tr>
+                 </thead>
+
+                 <tbody>
+                      {% for i in all %}
+                        <tr>
+                            <td></td>
+                            <td>{{ i.id}}</td>
+                            <td>{{ i.teacher_user_name}}</td>
+                            <td>{{ i.teacher_name}}</td>
+                            <td>{{ i.teacher_college_name}}</td>
+                            <td>{{ i.get_teacher_gender_display}}</td>{# get_字段名称_display()#}
+                            <td>{{ i.teacher_phone}}</td>
+                            <td>
+                                <a href="/campus/base_zy/{{ i.id }}/teacher_edit/">编辑</a>
+                                <a href="/campus/base_zy/{{ i.id }}/teacher_delete/" >删除</a>
+                            </td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+
+
+            <div class="g-table-list-pagination">
+                <div class="g-table-list-pagination-col">
+                    <span class="g-body-copy">Page</span>
+                        <form method="get">
+                            <input type="text" name="page_input" value="{{ search_data }}" class="g-table-list-pagination-current" placeholder="1">
+                        </form>
+                    <span class="g-body-copy">of {{ count_page}}</span>
+                </div>
+                <div class="g-table-list-pagination-col">
+                    {{ page_prev_next }}
+
+                </div>
+            </div>
+        </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+
+

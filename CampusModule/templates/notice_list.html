@@ -1,0 +1,210 @@
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static "css/manage_list.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        a{text-decoration:none}  /*去掉下划线*/
+        .shadow_css {
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 10;
+            /* 为mozilla firefox 设置透明度  */
+            -moz-opacity: 0.6;
+            /* 设置透明度 */
+            opacity: .60;
+            /* 为IE 设置透明度  */
+            filter: alpha(opacity=66);
+        }
+
+        .window_css {
+            display: none;
+            position: absolute;
+            top: 20%;
+            left: 25%;
+            width: 50%;
+            height: 60%;
+            border: 3px solid honeydew;
+            background-color: aliceblue;
+            z-index: 11;
+        }
+        #id{
+            width:5%;
+        }
+
+        #context{
+            width:40%;
+        }
+        #people{
+            width:7%;
+        }
+        #time{
+            width:13%;
+        }
+        #play{
+            width:10%;
+        }
+
+
+
+
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src="{% static 'js/axios.min.js'%}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>
+        function displayWindow() {
+            /*悬浮窗口的显示,需要将display变成block*/
+            document.getElementById("window").style.display = "block";
+            /*将背景变暗*/
+            document.getElementById("shadow").style.display = "block";
+        }
+
+        /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+        function hideWindow() {
+            document.getElementById("window").style.display = "none";
+            document.getElementById("shadow").style.display = "none";
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 3 %}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+{% block content%}
+ <div class="g-page">
+        <div class="g-header">
+            <div class="g-header-value page-title">疫情通告</div>
+            <div class="g-header-value page-title">共:{{ count}}</div>
+        </div>
+
+        <div class="g-table-body">
+            <ul class="g-table-actions">
+                <li class="g-table-actions-col">
+                    <a href="/campus/base_zy/notice_add/" class="g-actions-button g-actions-button-default">新增</a>
+                </li>
+                <li>
+                    <form class="g-forms-input" method="get">
+                        <input type="text" name="search_input" value="{{ search_data }}" class="g-forms-input-search-bar" placeholder="Search ...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"><i class="bi bi-search"></i></span>
+                            </button>
+                        </span>
+                    </form>
+                </li>
+            </ul>
+            <table cellspacing="0" class="g-table-list">
+                 <thead>
+                    <tr>
+                        <th class="g-table-list-col-edit"></th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="id">序号</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">标题</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="context">内容</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="people">发起人</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="time">发布时间</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="play">操作</th>
+{#                        <th class="g-table-list-col-edit"></th>#}
+                    </tr>
+                 </thead>
+
+                 <tbody>
+                      {% for i in all %}
+                            <tr>
+                                <td></td>
+                                <td>{{i.id}}</td>
+
+                                <td>
+                                    {{i.notice_name }}
+
+{#                                    <a href="/campus/base_zy/{{ i.id }}/notice_cont/"><div onclick="myFunction()">{{i.notice_name }}</div></a>#}
+{#                                    <script>#}
+{#                                        var Data = '{{ content|safe}}'#}
+{#                                        console.log(Data)#}
+{#                                            function myFunction()#}
+{#                                            {#}
+{#                                                alert(Data);#}
+{#                                            }#}
+{#                                    </script>#}
+{#                                    #}
+
+
+                                </td>
+                                <td>{{ i.notice_content }}</td>
+                                <td>{{ i.notice_writer }}</td>
+
+
+                                <td>{{i.notice_publishTime|date:"Y-m-d H:i:s"}}</td>
+                                <td>
+                                    <a href="/campus/base_zy/{{ i.id }}/notice_edit/">编辑</a>
+                                    <a href="/campus/base_zy/{{ i.id }}/notice_delete/" >删除</a>
+                                </td>
+                            </tr>
+                      {% endfor %}
+
+                 <!--用来引出悬浮窗口的div-->
+{#                    <div>#}
+{#                        <a href="javascript:void(0)" onclick="displayWindow()">#}
+{#                            点击显示悬浮窗口#}
+{#                        </a>#}
+{#                    </div>#}
+                    <!--悬浮窗口-->
+{#                    <div id="window" class="window_css">#}
+{#                        <a href="javascript:void(0)" onclick="hideWindow()">#}
+{#                            {{ content }}#}
+{#                        </a>#}
+{#                    </div>#}
+{#                    <!--出现悬浮窗口后,背景变暗-->#}
+{#                    <div id="shadow" class="shadow_css"></div>#}
+
+
+
+
+                </tbody>
+
+            </table>
+
+            <div class="g-table-list-pagination">
+                <div class="g-table-list-pagination-col">
+                    <span class="g-body-copy">Page</span>
+                        <form method="get">
+                            <input type="text" name="page_input" value="{{ search_data }}" class="g-table-list-pagination-current" placeholder="1">
+                        </form>
+                    <span class="g-body-copy">of {{ count_page}}</span>
+                </div>
+                <div class="g-table-list-pagination-col">
+                    {{ page_prev_next }}
+                </div>
+            </div>
+        </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+
+

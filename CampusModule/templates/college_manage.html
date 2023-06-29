@@ -1,0 +1,188 @@
+{#{% extends 'base_user.html' %}#}
+{#{% load static %}#}
+{##}
+{#{% block css %}#}
+{#    <style>#}
+{#        .container {#}
+{#          position: absolute;#}
+{#          top: 50%;#}
+{#          left: 50%;#}
+{#          transform: translate(-50%, -50%);#}
+{#        }#}
+{#        table {#}
+{#          width: 800px;#}
+{#          border-collapse: collapse;#}
+{#          overflow: hidden;#}
+{#          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);#}
+{#        }#}
+{#        th,#}
+{#        td {#}
+{#          padding: 15px;#}
+{#          background-color: rgba(255, 255, 255, 0.2);#}
+{#          color: #fff;#}
+{#        }#}
+{#        th {#}
+{#          text-align: left;#}
+{#        }#}
+{#        thead th {#}
+{#          background-color: #55608f;#}
+{#        }#}
+{#        tbody tr:hover {#}
+{#          background-color: rgba(255, 255, 255, 0.3);#}
+{#        }#}
+{#        tbody td {#}
+{#          position: relative;#}
+{#        }#}
+{#        tbody td:hover:before {#}
+{#          content: "";#}
+{#          position: absolute;#}
+{#          left: 0;#}
+{#          right: 0;#}
+{#          top: -9999px;#}
+{#          bottom: -9999px;#}
+{#          background-color: rgba(255, 255, 255, 0.2);#}
+{#          z-index: -1;#}
+{#        }#}
+{##}
+{#    </style>#}
+{#{% endblock %}#}
+{##}
+{#{% block js %}#}
+{##}
+{#{% endblock %}#}
+{##}
+{##}
+{#{% block content %}#}
+{#    <div class="container">#}
+{#        <table>#}
+{#            <thead>#}
+{#                <tr>#}
+{#                    <th>序号</th>#}
+{#                    <th>学院名称</th>#}
+{#                    <th>创建时间</th>#}
+{#                    <th>更新时间</th>#}
+{#                    <th>操作</th>#}
+{#                </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#                <tr>#}
+{#                    <td>Cell 1</td>#}
+{#                    <td>Cell 2</td>#}
+{#                    <td>Cell 3</td>#}
+{#                    <td>Cell 4</td>#}
+{#                    <td>#}
+{#                        <a href="#">修改</a>#}
+{#                        <a href="#">删除</a>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr>#}
+{#                    <td>Cell 1</td>#}
+{#                    <td>Cell 2</td>#}
+{#                    <td>Cell 3</td>#}
+{#                    <td>Cell 4</td>#}
+{#                    <td>#}
+{#                        <a href="#">修改</a>#}
+{#                        <a href="#">删除</a>#}
+{#                    </td>#}
+{#                </tr>#}
+{##}
+{##}
+{#            </tbody>#}
+{#        </table>#}
+{#    </div>#}
+{#{% endblock %}#}
+{##}
+{##}
+{##}
+{##}
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+    <style>
+        .container {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        table {
+          width: 800px;
+          border-collapse: collapse;
+          overflow: hidden;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        th,
+        td {
+          padding: 15px;
+          background-color: rgba(255, 255, 255, 0.2);
+          color: #fff;
+        }
+        th {
+          text-align: left;
+        }
+        thead th {
+          background-color: #55608f;
+        }
+        tbody tr:hover {
+          background-color: rgba(255, 255, 255, 0.3);
+        }
+        tbody td {
+          position: relative;
+        }
+        tbody td:hover:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: -9999px;
+          bottom: -9999px;
+          background-color: rgba(255, 255, 255, 0.2);
+          z-index: -1;
+        }
+
+    </style>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+
+    <a href="/campus/base_zy/college_add/">新建学院</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>学院名称</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cog in allCollege %}
+                <tr>
+                    <td>{{ cog.id}}</td>
+                    <td>{{ cog.college_name}}</td>
+                    <td>{{ cog.college_creatTime|date:"Y-m-d"}}</td>
+                    <td>{{ cog.college_updateTime|date:"Y-m-d H:i:s"}}</td>
+                    <td>
+                        <a href="#">修改</a>
+                        <a href="/campus/base_zy/college_delete/?nid={{ cog.id }}" >删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+
+
+

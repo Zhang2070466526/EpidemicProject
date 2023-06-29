@@ -1,0 +1,41 @@
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+        <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+        <style>
+        a:link{
+                text-decoration: none; /*    取消下滑线*/
+            }
+        </style>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+{% endblock %}
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 4 %}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<h4>{{ title }}</h4>
+    <form method="post"  novalidate>{% csrf_token %}
+        {% for field in form %}
+            <label>{{ field.label }}</label>
+            {{ field }}
+           <span style="color:red;"> {{ field.errors.0 }}</span><br>
+            {#  报错信息 是个列表，可以先选索引0#}
+        {% endfor %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
+
+
+

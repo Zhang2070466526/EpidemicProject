@@ -1,0 +1,47 @@
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+        <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+    <style>
+        .add_main{
+            width:60vw;
+            height:80vh;
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+{% endblock %}
+
+
+{% block nav %}
+    {% for i in nav_html %}
+{#        <a>i</a>#}
+         {% if i.index < 4 %}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="add_main">
+        <form method="post" >{% csrf_token %}
+            <h4>学院编辑</h4>
+            <div class="mb-3">
+                <label  class="form-label" >学院名称</label>
+                <input type="text" class="form-control"  name="col_name" value="{{ row_object.college_name }}">
+{#                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>#}
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
+
+

@@ -1,0 +1,54 @@
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+        <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+    <style>
+        .add_main{
+            width:60vw;
+            height:80vh;
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="add_main">
+        <form method="post" action="/campus/base_zy/class_add/">{% csrf_token %}
+            <div class="mb-3">
+                <label  class="form-label" >班级名称</label>
+                <input type="text" class="form-control"  name="cla_name">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label  class="form-label" >班级备注</label>
+                <input type="text" class="form-control"  name="cla_remark">
+                <div id="emailHelp" class="form-text"></div>
+            </div>
+            <div class="mb-3">
+                <label  class="form-label" >所属学院</label>
+                <select name="cla_college_name">
+                    {% for co in college_list %}
+                        <option value="{{ co.id }}">{{ co.college_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label  class="form-label" >创建时间</label>
+                <input type="date" class="form-control" name="cla_cre_time">
+            </div>
+            <div class="mb-3">
+                <label  class="form-label" >修改时间</label>
+                <input type="date" class="form-control" name="cla_upd_time" >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
+
+

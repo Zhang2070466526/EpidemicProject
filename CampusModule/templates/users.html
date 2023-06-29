@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8">
+        <title>校园疫情管理系统-用户版</title>
+        <link href="{% static "css/base_zy.css" %}" rel="stylesheet" type="text/css"/>
+        <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {% block css %}
+
+        {% endblock %}
+
+
+        {% block js %}
+
+        {% endblock %}
+
+    </head>
+<body>
+    <div class="sidebar">
+        <div class="logo-details">
+          <i class='bx bxl-c-plus-plus'></i>
+          <span class="logo_name">校园疫情管理系统-用户</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/campus/base_zy/index/">
+                  <i class='bx bx-grid-alt' ></i>
+                  <span class="link_name">主页</span>
+                </a>
+{#                <ul class="sub-menu blank">#}
+{#                    <li><a class="link_name" href="#">Category</a></li>#}
+{#                </ul>#}
+            </li>
+
+            <li>
+                <div class="iocn-link">
+                    <a href="/campus/base_zy/world_data/">
+                        <i class='bx bx-line-chart' ></i>
+                        <span class="link_name">疫情数据</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow' ></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a href="/campus/base_zy/hubei_data/">湖北省数据</a></li>
+                    <li><a href="/campus/base_zy/china_data/">全国数据</a></li>
+                    <li><a href="/campus/base_zy/world_data/">世界数据</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <div class="iocn-link">
+                    <a href="/campus/base_zy/college_list/">
+                        <i class='bx bx-collection' ></i>
+                        <span class="link_name">校园管理</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow' ></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a href="/campus/base_zy/college_list/">学院管理</a></li>
+                    <li><a href="/campus/base_zy/class_list/">班级管理</a></li>
+                    <li><a href="/campus/base_zy/teacher_list/">辅导员管理</a></li>
+                    <li><a href="/campus/base_zy/student_list/">学生管理</a></li>
+                </ul>
+            </li>
+
+            <li>
+            <div class="iocn-link">
+              <a href="#">
+                <i class='bx bx-book-alt' ></i>
+                <span class="link_name">个人中心</span>
+              </a>
+              <i class='bx bxs-chevron-down arrow' ></i>
+            </div>
+            <ul class="sub-menu">
+              <li><a class="link_name" href="#">Posts</a></li>
+              <li><a href="#">学生注册</a></li>
+              <li><a href="#">教师注册</a></li>
+            </ul>
+            </li>
+
+            <li>
+            <a href="/campus/base_zy/notice_list/">
+              <i class='bx bx-pie-chart-alt-2' ></i>
+              <span class="link_name">疫情通告</span>
+            </a>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="#">Analytics</a></li>
+            </ul>
+            </li>
+
+
+
+            <li>
+            <div class="iocn-link">
+              <a href="#">
+                <i class='bx bx-plug' ></i>
+                <span class="link_name">健康填报</span>
+              </a>
+              <i class='bx bxs-chevron-down arrow' ></i>
+            </div>
+            <ul class="sub-menu">
+              <li><a class="link_name" href="#">Plugins</a></li>
+              <li><a href="/campus/base_zy/filling_list/">健康上报</a></li>
+              <li><a href="/campus/base_zy/itinerary_list/">行程管理</a></li>
+            </ul>
+            </li>
+
+            <li>
+                <a href="/campus/base_zy/updateinfo/">
+                  <i class='bx bx-compass' ></i>
+                  <span class="link_name">Explore</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="/campus/updateinfo/">Explore</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="/campus/base_zy/show/">
+                  <i class='bx bx-history'></i>
+                  <span class="link_name">History</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="/campus/base_zy/show/">History</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="">
+                  <i class='bx bx-cog' ></i>
+                  <span class="link_name">Setting</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="">Setting</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <div class="profile-details">
+                    <div class="profile-content">
+                        <img src="{% static "img/1.png" %}" alt="profile">
+                    </div>
+                    <div class="name-job">
+                        <div class="profile_name">Admin</div>
+                        <div class="job">管理员</div>
+                    </div>
+                        <a href="/campus/login/"><i class='bx bx-log-out' ></i></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="home-section">
+        <div class="nav">1</div>
+        <div class="main">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+
+    </div>
+
+
+    <script>
+        let arrow = document.querySelectorAll(".arrow");
+        for (var i = 0; i < arrow.length; i++) {
+            arrow[i].addEventListener("click", (e)=>{
+            let arrowParent = e.target.parentElement.parentElement;
+            arrowParent.classList.toggle("showMenu");
+        });
+        }
+
+        let sidebar = document.querySelector(".sidebar");
+        let sidebarBtn = document.querySelector(".bx-menu");
+        console.log(sidebarBtn);
+        sidebarBtn.addEventListener("click", ()=>{
+            sidebar.classList.toggle("close");
+        });
+    </script>
+
+</body>
+</html>

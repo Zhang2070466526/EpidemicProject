@@ -1,0 +1,268 @@
+{#{% extends 'base_user.html' %}#}
+{#{% load static %}#}
+{##}
+{#{% block css %}#}
+{#    <style>#}
+{#        .container {#}
+{#          position: absolute;#}
+{#          top: 50%;#}
+{#          left: 50%;#}
+{#          transform: translate(-50%, -50%);#}
+{#        }#}
+{#        table {#}
+{#          width: 800px;#}
+{#          border-collapse: collapse;#}
+{#          overflow: hidden;#}
+{#          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);#}
+{#        }#}
+{#        th,#}
+{#        td {#}
+{#          padding: 15px;#}
+{#          background-color: rgba(255, 255, 255, 0.2);#}
+{#          color: #fff;#}
+{#        }#}
+{#        th {#}
+{#          text-align: left;#}
+{#        }#}
+{#        thead th {#}
+{#          background-color: #55608f;#}
+{#        }#}
+{#        tbody tr:hover {#}
+{#          background-color: rgba(255, 255, 255, 0.3);#}
+{#        }#}
+{#        tbody td {#}
+{#          position: relative;#}
+{#        }#}
+{#        tbody td:hover:before {#}
+{#          content: "";#}
+{#          position: absolute;#}
+{#          left: 0;#}
+{#          right: 0;#}
+{#          top: -9999px;#}
+{#          bottom: -9999px;#}
+{#          background-color: rgba(255, 255, 255, 0.2);#}
+{#          z-index: -1;#}
+{#        }#}
+{##}
+{#    </style>#}
+{#{% endblock %}#}
+{##}
+{#{% block js %}#}
+{##}
+{#{% endblock %}#}
+{##}
+{##}
+{#{% block content %}#}
+{#    <div class="container">#}
+{##}
+{#    <a href="/campus/base_zy/college_add/">新建学院</a>#}
+{#        <table>#}
+{#            <thead>#}
+{#                <tr>#}
+{#                    <th>序号</th>#}
+{#                    <th>学院名称</th>#}
+{#                    <th>创建时间</th>#}
+{#                    <th>更新时间</th>#}
+{#                    <th>操作</th>#}
+{#                </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#            {% for cog in allCollege %}#}
+{#                <tr>#}
+{#                    <td>{{ cog.id}}</td>#}
+{#                    <td>{{ cog.college_name}}</td>#}
+{#                    <td>{{ cog.college_creatTime|date:"Y-m-d"}}</td>#}
+{#                    <td>{{ cog.college_updateTime|date:"Y-m-d H:i:s"}}</td>#}
+{#                    <td>#}
+{#                        <a href="#">修改</a>#}
+{#                        <a href="/campus/base_zy/college_delete/?nid={{ cog.id }}" >删除</a>#}
+{#                    </td>#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{##}
+{##}
+{#            </tbody>#}
+{#        </table>#}
+{#    </div>#}
+{#{% endblock %}#}
+{##}
+{##}
+{##}
+
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+
+    <link href="{% static "css/bootstrap3.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "css/manage_list.css" %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/jquery.min.js'%}"></script>
+    <script src="{% static "js/bootstrap3.min.js"%}"></script>
+    <script src="{% static 'js/axios.min.js'%}"></script>
+    <script type="text/javascript">
+       let DELETE_ID;
+        let EDIT_ID;
+
+        $(function () {
+            bindBtnAddEvent();
+            bindBtnSaveEvent();
+        })
+
+        function bindBtnAddEvent() {
+            $('#btnAdd').click(function () {
+                //将正在编辑的id设置为空
+                EDIT_ID = undefined;
+
+                //改title
+                $("#myModalLabel").text("学院新增")
+                // 每次打开清空对话框中上一次输入的信息
+                $("#formAdd")[0].reset();
+
+                //点击新建按钮,显示对话框
+                $('#myModal').modal('show')
+            })
+        }
+
+        function bindBtnSaveEvent() {
+            {#向后台发送ajax请求#}
+            $("#btnSave").click(function () {
+
+                {#点击之前，清空内容#}
+                $(".error_msg").empty();
+                $.ajax({
+                    url: "/campus/base_zy/college_add/",
+                    type: "POST",
+                    data: $("#formAdd").serialize()+"&order="+ EDIT_ID,
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status) {
+                            {#alert("tscg!");#}
+                            // 每次打开清空对话框中上一次输入的信息
+                            $("#formAdd")[0].reset();
+                            // 关闭对话框
+                            $("#myModal").modal('hide');
+
+                            //刷新展示列表
+                            location.reload();
+                        } else {
+                            {#把错误信息显示在span框中#}
+                            $.each(res.error, function (name, errorlist) {
+                                $("#id_" + name).next().text(errorlist[0]);
+                            })
+                        }
+                    }
+                })
+            })
+        }
+
+    </script>
+{% endblock %}
+
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 3 %}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block content%}
+    <div class="g-page">
+        <div class="g-header">
+            <div class="g-header-value page-title">学院管理页面</div>
+            <div class="g-header-value page-title">共:{{ count}}</div>
+        </div>
+
+        <div class="g-table-body">
+            <ul class="g-table-actions">
+                <li class="g-table-actions-col">
+                    <button id="btnAdd" type="button" class="btn btn-primary" data-toggle="modal" >新增</button>
+                </li>
+                <li>
+                    <form class="g-forms-input" method="get">
+                        <input type="text" name="search_input" value="{{ search_data }}" class="g-forms-input-search-bar" placeholder="Search ...">
+                    </form>
+                </li>
+            </ul>
+            <table cellspacing="0" class="g-table-list">
+                 <thead>
+                    <tr>
+                        <th class="g-table-list-col-edit"></th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">序号</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">学院名称</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">创建时间</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">更新时间</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">操作</th>
+                        <th class="g-table-list-col-edit"></th>
+                    </tr>
+                 </thead>
+                <tbody>
+                    {% for cog in all %}
+                        <tr>
+                            <td></td>
+                            <td>{{ cog.id}}</td>
+                            <td>{{ cog.college_name}}</td>
+                            <td>{{ cog.college_creatTime|date:"Y-m-d"}}</td>
+                            <td>{{ cog.college_updateTime|date:"Y-m-d H:i:s"}}</td>
+                            <td>
+                                <a href="/campus/base_zy/{{ cog.id }}/college_edit/">修改</a>
+                                <a href="/campus/base_zy/college_delete/?coid={{ cog.id }}" >删除</a>
+                            </td>
+                            <td></td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="g-table-list-pagination">
+                <div class="g-table-list-pagination-col">
+                    <span class="g-body-copy">Page</span>
+                        <form method="get">
+                            <input type="text" name="page_input" value="{{ search_data }}" class="g-table-list-pagination-current" placeholder="1">
+                        </form>
+                    <span class="g-body-copy">of {{ count_page}}</span>
+                </div>
+                <div class="g-table-list-pagination-col">
+                    {{ page_prev_next }}
+                </div>
+            </div>
+
+        </div>
+{##}
+     <!-- 新建/编辑 订单的对话框 -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">学院新增</h4>
+              </div>
+              <div class="modal-body">
+                <form method="post" id="formAdd" novalidate>
+                    {% for item in form %}
+                      <div class="form-group">
+                        <label for="recipient-name" class="control-label">{{ item.label }}</label>{{ item }}
+                        <span class="error_msg" style="color:red;position: absolute"></span>
+                      </div>
+                    {% endfor %}
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="btnSave" type="submit" class="btn btn-primary">保存</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+

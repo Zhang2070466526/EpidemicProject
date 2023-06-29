@@ -1,0 +1,30 @@
+{% extends 'base_zy.html' %}
+{% load static %}
+
+{% block css %}
+        <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+{% endblock %}
+
+
+{% block content %}
+<h1>疫情通告编辑</h1>
+    <form method="post"  novalidate>{% csrf_token %}
+
+        {% for field in form %}
+            <label>{{ field.label }}</label>
+            {{ field }}
+           <span style="color:red;"> {{ field.errors.0 }}</span><br>
+            {#  报错信息 是个列表，可以先选索引0#}
+        {% endfor %}
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
+
+
+

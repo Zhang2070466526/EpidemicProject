@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link href="{% static "css/login.css" %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static "js/jquery.min.js" %}"></script>
+
+</head>
+<body>
+    <form method="post" action="/campus/login/">{% csrf_token %}
+        <div class="login">
+            <h2>用户登录</h2>
+            <div class="login_box">
+                <!-- required就是不能为空 必须在css效果中有很大的作用 -->
+                <!-- 可以简写为required -->
+                <input type="text" required="required" name="username" id="name"/>
+                <label for="name">用户名</label>
+            </div>
+            <div class="login_box">
+                <input type="password" required="required" name="userpassword" id="pwd"/>
+                <label for="pwd">密码</label>
+            </div>
+            <button type="submit" >登录
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="jump">
+                <p >如果您还没有注册?
+                    <a href="/campus/register/">点击这里注册</a>
+                </p>
+            </div>
+            <div class="error">{{ error_msg }}</div>
+        </div>
+    </form>
+
+
+
+</body>
+</html>
+
+

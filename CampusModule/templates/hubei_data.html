@@ -1,0 +1,479 @@
+
+
+
+
+
+{% extends 'base_zy.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        .main{
+            width:100%;
+            height:100%;
+            {#background-color: #ffc107;#}
+            display: flex;
+            flex-direction: column;
+        }
+        .top{
+            flex:1;
+            display: flex;
+        }
+        .down{
+            flex:1;
+        }
+        #echarts1{
+            flex: 1;
+        }
+        #echarts2{
+            flex: 1;
+        }
+
+
+
+    </style>
+{% endblock %}
+{% block js %}
+    <script src="{% static "js/echarts.min.js" %}"></script>
+    <script src="{% static "js/jquery.min.js" %}"></script>
+{% endblock %}
+
+
+
+{% block nav %}
+    {% for i in nav_html %}
+        {% if i.index < 3%}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+        {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div class="top" >
+        <div id="echarts1">1</div>
+        <div id="echarts2">2</div>
+    </div>
+    <div class="down" id="echarts3">3</div>
+</div>
+
+
+    <script>
+         var hbdata = {{ hbData|safe}};
+         console.log(hbdata)
+        $.get("{% static 'mapData/province/hubei.json' %}",function(ret){
+            // console.log(ret)
+            // console.log(ret.features[2].properties.cp)
+            echarts.registerMap("hubei",ret)
+            var myCharts1=echarts.init(document.getElementById("echarts1"))
+            var option1={
+                title: {
+                    text: '湖北省累计确诊',
+                },
+                geo:{
+                    type:"map",
+                    map:"hubei",
+                    label:{
+                        show:true
+                    },
+                    roam:true,
+                    zoom:1.256,
+                    {#center:ret.features[4].properties.cp//襄阳市的坐标#}
+                   center:[111.204251,31.11542]//经度,维度
+                },
+                visualMap: {
+                    min: 1000,
+                    max: 9999,
+                    text: ['High', 'Low'],
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                      color:["silver","cornflowerblue","rgb(70,146,185)","mediumblue","darkblue"]
+                    }
+                },
+                series:[
+                    {
+                        data:hbdata,
+                        {#data: [#}
+                        {#        {#}
+                        {#            "name": "武汉市",#}
+                        {#            "value": 50789#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "黄冈市",#}
+                        {#            "value": 2913#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "孝感市",#}
+                        {#            "value": 3518#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "荆门市",#}
+                        {#            "value": 971#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "咸宁市",#}
+                        {#            "value": 836#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "荆州市",#}
+                        {#            "value": 1582#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "襄阳市",#}
+                        {#            "value": 1190#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "随州市",#}
+                        {#            "value": 1307#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "十堰市",#}
+                        {#            "value": 674#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "鄂州市",#}
+                        {#            "value": 1395#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "黄石市",#}
+                        {#            "value": 1016#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "宜昌市",#}
+                        {#            "value": 932#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "恩施土家族苗族自治州",#}
+                        {#            "value": 255#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "仙桃市",#}
+                        {#            "value": 575#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "天门市",#}
+                        {#            "value": 498#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "潜江市",#}
+                        {#            "value": 200#}
+                        {#        },#}
+                        {#        {#}
+                        {#            "name": "神农架林区",#}
+                        {#            "value": 12#}
+                        {#        }#}
+                        {#  ],#}
+                        geoIndex:0,//将array的数据与第一(索引为0)个geo配置关联
+                        type:"map",
+                    },
+                ],
+
+            }
+            myCharts1.setOption(option1)
+        })
+
+
+
+
+        var myCharts2=echarts.init(document.getElementById('echarts2'))
+        var dataMax=[
+            {name:"累积确诊",max:"53000"},{name:"治愈",max:"53000"},{name:"死亡",max:"53000"}
+        ]//各个维度最大值
+        var option2= {
+            radar:{
+                indicator:dataMax,
+                scale:true,  // 脱离零值比例
+                radius:['0%','100%'],  //半径
+                center:['50%','63%']   //中心坐标
+            },
+            legend:{
+                data:[{{topCity|safe}}[0],{{topCity|safe}}[1],{{topCity|safe}}[2]],
+                textStyle: {
+                    color:'rgba(181,221,245,0.8)'
+                }
+            },
+
+
+            series:[
+                {
+                    type:"radar",
+                    label:{
+                        show:true,
+                        color:"red"
+                    },
+                    data:[
+                        {
+                            name:{{topCity|safe}}[0],
+                            value:{{ topData|safe }}[0]
+                        },
+                        {
+                            name:{{topCity|safe}}[1],
+                            value:{{ topData|safe }}[1]
+                        },
+                        {
+                            name:{{topCity|safe}}[2],
+                            value:{{ topData|safe }}[2]
+                        },
+                    ]
+                },
+            ]
+        }
+        myCharts2.setOption(option2)
+
+
+
+        var topData = {{ topData|safe}};
+        var myChart3 = echarts.init(document.getElementById('echarts3'));
+        var option3 = {
+        title:{
+            text:"Top7城市疫情",
+            textStyle:{
+                color:"blue",
+                fontSize:20
+            }
+          },
+        xAxis: {
+          type: 'category',
+          data:{{ls_date|safe}},
+          axisTick:{
+                    alignWithLabel:true
+                },
+        },
+        yAxis: {
+          type: 'value'
+        },
+        toolbox:{//工具箱
+                show:true,
+                feature:{
+                    restore:{},
+                    dataZoom:{},
+                    magicType:{
+                        type:["line","bar","stack"]
+                    },
+                }
+            },
+        tooltip: {//提示框(鼠标滑过或点击图表时的显示框)
+            trigger: 'axis',//触发类型 item只在柱子内部时显示
+            triggerOn:'mousemove',//触发时机 click
+            //formatter:"{b}成绩是{c}",//格式化 字符串模板,回调函数
+            formatter:function(arg){
+                // console.log(arg)
+                // return arg[0].name+"的分数是:"+arg[0].data
+            },
+            axisPointer: {//坐标轴指示器
+                //type: 'shadow' //指示器类型  阴影指示器    line直线指示器
+                type: 'cross' //十字准星指示器
+            }
+        },
+        legend:{
+            data:{{topCity|safe}},
+                            {#top:'30px',#}
+            textStyle: {
+                color:'rgba(181,221,245,0.8)'
+            }
+        },
+        grid:{//控制直角坐标系的布局和大小
+                {#show:true,#}
+                left:'center',//20%,center,left,right  在东西方向的位置
+                top:"middle",//25,bottom,top,middle  在上下方向的位置
+                width:'90%',//宽度
+                height:'80%',//高度
+        },
+        series: [
+            {
+                name:{{topCity|safe}}[0],
+                data: topData[0],
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                },
+                markPoint:{
+                        data:[
+                            {type:"max",name:"最大值"},
+                            {type:"min",name:"最小值"}
+                        ]
+                    },
+                    markLine:{
+                        data:[{type:"average",name:"平均值"}]
+                    },
+                    //label:{//数值显示
+                        //show:true,
+                        //position:"inside",
+                        //rotate:-60,
+                        //color:"yellow",
+                    //},
+                    barWidth:"10%",
+            },
+            {
+                name:{{topCity|safe}}[1],
+                data: topData[1],
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                },
+                markPoint:{
+                        data:[
+                            {type:"max",name:"最大值"},
+                            {type:"min",name:"最小值"}
+                        ]
+                    },
+                    markLine:{
+                        data:[{type:"average",name:"平均值"}]
+                    },
+                    //label:{//数值显示
+                        //show:true,
+                        //position:"top",
+                        //color:"lightyellow",
+                    //},
+                    barWidth:"10%",
+            },
+            {
+                name:{{topCity|safe}}[2],
+                data: topData[2],
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                },
+                markPoint:{
+                    data:[
+                        {type:"max",name:"最大值"},
+                        {type:"min",name:"最小值"}
+                    ]
+                },
+                markLine:{
+                    data:[{type:"average",name:"平均值"}]
+                },
+                //label:{//数值显示
+                    //show:true,
+                    //position:"top",
+                        //color:"yellow",
+                //},
+                barWidth:"10%",
+            },
+            {
+                name:{{topCity|safe}}[3],
+                data: topData[3],
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                },
+                markPoint:{
+                    data:[
+                        {type:"max",name:"最大值"},
+                        {type:"min",name:"最小值"}
+                    ]
+                },
+                markLine:{
+                    data:[{type:"average",name:"平均值"}]
+                },
+                //label:{//数值显示
+                    //show:true,
+                    //position:"inside",
+                    //rotate:-60,
+                    //color:"lightyellow",
+                //},
+                barWidth:"10%",
+            },
+            {
+                name:{{topCity|safe}}[4],
+                data: topData[4],
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                },
+                markPoint:{
+                    data:[
+                        {type:"max",name:"最大值"},
+                        {type:"min",name:"最小值"}
+                    ]
+                },
+                markLine:{
+                    data:[{type:"average",name:"平均值"}]
+                },
+                //label:{//数值显示
+                    //show:true,
+                    //position:"top",
+                    //color:"yellow",
+                //},
+                barWidth:"10%",
+            },
+            {
+                name:{{topCity|safe}}[5],
+                data: topData[5],
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                },
+                markPoint:{
+                data:[
+                        {type:"max",name:"最大值"},
+                        {type:"min",name:"最小值"}
+                    ]
+                },
+                markLine:{
+                    data:[{type:"average",name:"平均值"}]
+                },
+                //label:{//数值显示
+                    //show:true,
+                    //position:"top",
+                    //color:"lightyellow",
+                //},
+                barWidth:"10%",
+            },
+            {
+                name:{{topCity|safe}}[6],
+                data: topData[6],
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                },
+                markPoint:{
+                    data:[
+                        {type:"max",name:"最大值"},
+                        {type:"min",name:"最小值"}
+                    ]
+                },
+                markLine:{
+                    data:[{type:"average",name:"平均值"}]
+                },
+                //label:{//数值显示
+                    //show:true,
+                    //position:"top",
+                    //color:"yellow",
+                //},
+                barWidth:"10%",
+            }
+        ]
+        };
+        myChart3.setOption(option3);
+
+
+
+
+
+
+
+
+
+      //一个页面有多个图表的时候就需要用到addEventListener了，不然页面上只有一个图表会根据浏览器的变化而自适应。
+      window.addEventListener('resize',function(){
+        myCharts1.resize();
+        myCharts3.resize();
+        myCharts2.resize();
+
+      });
+
+
+
+    </script>
+
+{% endblock %}
