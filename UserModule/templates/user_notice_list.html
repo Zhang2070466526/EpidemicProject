@@ -1,0 +1,151 @@
+{% extends 'base_user.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static "css/manage_list.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        a{text-decoration:none}  /*去掉下划线*/
+        #uu,#id{
+            width: 4%;
+        }
+        #title{
+            width: 15%;
+        }
+        #context{
+            width: 50%;
+        }
+        #people{
+            width: 7%;
+        }
+        #ttime{
+            width: 15%;
+        }
+        #play{
+            width: 6%;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src="{% static 'js/axios.min.js'%}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>
+        function displayWindow() {
+            /*悬浮窗口的显示,需要将display变成block*/
+            document.getElementById("window").style.display = "block";
+            /*将背景变暗*/
+            document.getElementById("shadow").style.display = "block";
+        }
+
+        /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+        function hideWindow() {
+            document.getElementById("window").style.display = "none";
+            document.getElementById("shadow").style.display = "none";
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 2 %}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+{% block content%}
+ <div class="g-page">
+        <div class="g-header">
+            <div class="g-header-value page-title">疫情通告</div>
+            <div class="g-header-value page-title">共:{{ count}}</div>
+        </div>
+
+        <div class="g-table-body">
+            <ul class="g-table-actions">
+                <li class="g-table-actions-col">
+
+                </li>
+                <li>
+                    <form class="g-forms-input" method="get">
+                        <input type="text" name="search_input" value="{{ search_data }}" class="g-forms-input-search-bar" placeholder="Search ...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"><i class="bi bi-search"></i></span>
+                            </button>
+                        </span>
+                    </form>
+                </li>
+            </ul>
+            <table cellspacing="0" class="g-table-list">
+                 <thead>
+                    <tr>
+                        <th class="g-table-list-col-edit" id="uu"></th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="id">序号</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="title">标题</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="context">内容</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="people">发起人</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="ttime">发布时间</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required" id="play">操作</th>
+{#                        <th class="g-table-list-col-edit"></th>#}
+                    </tr>
+                 </thead>
+
+                 <tbody>
+                      {% for i in all %}
+
+                            <tr>
+                                <td></td>
+                                <td>{{i.index}}</td>
+
+                                <td>
+                                    {{i.notice_name }}
+                                </td>
+                                <td>{{ i.notice_content }}</td>
+                                <td>{{ i.notice_writer }}</td>
+
+                                <td>{{i.notice_publishTime|date:"Y-m-d H:i:s"}}</td>
+                                <td>
+                                    <a href="/users/base_user/{{ i.id }}/notice_look/">查看</a>
+                                </td>
+
+                            </tr>
+                      {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <div class="g-table-list-pagination">
+                <div class="g-table-list-pagination-col">
+                    <span class="g-body-copy">Page</span>
+                        <form method="get">
+                            <input type="text" name="page_input" value="{{ search_data }}" class="g-table-list-pagination-current" placeholder="1">
+                        </form>
+                    <span class="g-body-copy">of {{ count_page}}</span>
+                </div>
+                <div class="g-table-list-pagination-col">
+                    {{ page_prev_next }}
+                </div>
+            </div>
+        </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+
+

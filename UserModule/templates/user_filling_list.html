@@ -1,0 +1,141 @@
+
+
+{% extends 'base_user.html' %}
+{% load static %}
+
+{% block css %}
+
+    <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "css/manage_list.css" %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/jquery.min.js'%}"></script>
+    <script src="{% static "js/bootstrap5.min.js"%}"></script>
+    <script src="{% static 'js/axios.min.js'%}"></script>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block content%}
+    <div class="g-page">
+
+        <div class="g-header">
+            <div class="g-header-value page-title">学生健康打卡管理页面</div>
+            <div class="g-header-value page-title">$48,206</div>
+            <div class="g-header-value sub-title">3,008 total</div>
+            <div class="g-header-value sub-title">9 pending</div>
+        </div>
+
+        <div class="g-table-body">
+            <ul class="g-table-actions">
+                <li class="g-table-actions-col">
+{#                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">打卡</button>#}
+                    <a href="/campus/base_zy/filling_add/" class="g-actions-button g-actions-button-default">新增</a>
+                </li>
+                <li>
+                    <form class="g-forms-input">
+                    <input type="text" class="g-forms-input-search-bar" placeholder="Search SKU...">
+                    <i class="g-forms-input-search-bar-icon fa fa-fw fa-search"></i>
+                    </form>
+                </li>
+            </ul>
+            <table cellspacing="0" class="g-table-list">
+                 <thead>
+                    <tr>
+                        <th class="g-table-list-col-edit"></th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">序号</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">姓名</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">体温</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">截图</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">健康状况</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">疫苗针次</th>
+                        <th class="g-table-list-col-title g-table-list-col-desc required">备注</th>
+                        <th class="g-table-list-col-edit"></th>
+                    </tr>
+                 </thead>
+                <tbody>
+                    {% for fil in allFilling %}
+                        <tr>
+                            <td></td>
+                            <td>{{ fil.id}}</td>
+                            <td>{{ fil.filling_name}}</td>
+                            <td>{{ fil.filling_temperature}}</td>
+                            <td>
+                                <img src="/campus/media/{{ fil.filling_nucleic}}" style="height:80px;width:50px">
+                            </td>
+                            <td>{{ fil.filling_health}}</td>
+                            <td>{{ fil.filling_countVaccine}}</td>
+                            <td>{{ fil.filling_remark}}</td>
+                            <td>
+
+                            </td>
+                            <td></td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+
+
+            <div class="g-table-list-pagination">
+                <div class="g-table-list-pagination-col">
+                    <span class="g-body-copy">Page</span>
+                    <form><input type="text" class="g-table-list-pagination-current" placeholder="3"></form>
+                    <span class="g-body-copy">of 32</span>
+                </div>
+                <div class="g-table-list-pagination-col">
+                    <a href="#" class="g-actions-button g-actions-button-pager"><i class="fa fa-fw fa-caret-left right-4"></i>Prev</a>
+                    <a href="#" class="g-actions-button g-actions-button-pager g-table-list-pager">Next<i class="fa fa-fw fa-caret-right left-4"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+{#        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+{#          <div class="modal-dialog">#}
+{#            <div class="modal-content">#}
+{#              <div class="modal-header">#}
+{#                <h1 class="modal-title fs-5" id="exampleModalLabel">打卡</h1>#}
+{#                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
+{#              </div>#}
+{#              <div class="modal-body">#}
+{#                <form method="post" method="/base_zy/filling_add/" id="formAdd" enctype="multipart/form-data" novalidate>#}
+{#                    {% for item in form %}#}
+{#                      <div class="form-group">#}
+{#                        <label for="recipient-name" class="control-label">{{ item.label }}</label>{{ item }}#}
+{#                        <span class="error_msg" style="color:red;position: absolute"></span>#}
+{#                      </div>#}
+{#                    {% endfor %}#}
+{#                </form>#}
+{#              </div>#}
+{#              <div class="modal-footer">#}
+{#                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>#}
+{#                <button id="btnSave" type="button" class="btn btn-primary">提交</button>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+    </div>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+

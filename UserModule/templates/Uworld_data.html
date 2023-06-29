@@ -1,0 +1,100 @@
+{% extends 'base_user.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        #echarts3{
+            width:100%;height:100%;
+            {#background-image: linear-gradient(to bottom right,rgba(0,47,167,1),rgba(0,13,12,1),rgba(54,32,13,0));#}
+        }
+    </style>
+{% endblock %}
+{% block js %}
+    <script src="{% static "js/echarts.min.js" %}"></script>
+    <script src="{% static "js/jquery.min.js" %}"></script>
+{% endblock %}
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 3%}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block content %}
+
+    <div id="echarts3"></div>
+    <script>
+        var scatterData=[
+            {
+                {#value:[107.69031,35.31257]//武汉#}
+                value:[114.69031,30.31257]//武汉
+
+            },
+            {
+                value:[0.1,51.3]//伦敦
+            },
+            {
+                value:[-73,41]//华盛顿
+            }
+        ]
+        var worldData={{ wdData|safe }}
+        {#console.log(worldData)#}
+        $.get("{% static "mapData/world.json" %}",function (ret){
+            echarts.registerMap("world",ret)
+            var myCharts=echarts.init(document.getElementById('echarts3'))
+            var option={
+                title:{
+                    text:"世界累计确诊",
+                    link:"https://echarts.apache.org",
+                    textStyle:{
+                        fontSize:20,
+                        color:"rgba(215,215,215,1)",
+                    }
+                },
+                geo:{
+                    type:"map",
+                    map:"world",
+                    roam:true,
+                    label:{
+                        show:true,
+                        color:'rgb(128,0,32)',//勃艮第红
+                        fontSize: 9,
+                    },
+                    zoom:1.2,
+                },
+                series:[
+                    {
+                        type:"map",
+                        geoIndex:0,
+                        data:worldData,
+                    },
+                    {
+                        type:"effectScatter",//配置散点的坐标数据
+                        data:scatterData,
+                        coordinateSystem:'geo',//指明散点使用的坐标系统是geo的坐标系统(经纬度)
+                        rippleEffect:{
+                            scale:3,
+                            color:'white'
+                        },
+
+                    }
+                ],
+            visualMap:{
+                    min:1,
+                    max:101865927,
+                    inRange:{
+                        color:[
+                        '#7197ec', '#8e8de9','#7DF675','#5CE182','#29CF6F',
+                            '#aa82e1', '#c375d3','#D04343',
+                            '#fb5a80', '#fb5f5f','#C92B2B']
+                    },
+                    calculable:true
+                }
+            }
+            myCharts.setOption(option)
+
+        })
+    </script>
+
+{% endblock %}

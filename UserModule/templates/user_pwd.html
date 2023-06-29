@@ -1,0 +1,50 @@
+{% extends 'base_user.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>
+    <style>
+        .form-control{
+            width:40%
+        }
+        a{text-decoration:none}  /*去掉下划线*/
+
+        .error{
+            font: bold 18px Arial;
+            color:red;
+        }
+    </style>
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static "js/bootstrap5.min.js" %}"></script>
+{% endblock %}
+
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 3 %}
+            <a href="{{ i.url }}">{{i.title}}</a>>
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+{% block content %}
+    <form  method="post" action="/users/base_user/user_pwd/">{% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">用户名</label>
+            <input type="text" class="form-control" id="exampleInput" name="Uname" value="{{ uu }}" readonly="readonly">
+
+            <label for="exampleInputPassword1" class="form-label">新密码</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="Upwd1">
+            <label for="exampleInputPassword1" class="form-label">确认密码</label>
+            <input type="password" class="form-control" id="exampleInputPassword2" name="Upwd2">
+        </div>
+
+        <div class="error">{{ error_msg }}</div>
+         <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

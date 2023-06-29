@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8">
+        <title>校园疫情管理系统U</title>
+        <link href="{% static "css/base_user.css" %}" rel="stylesheet" type="text/css"/>
+        <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {% block css %}
+
+        {% endblock %}
+
+
+        {% block js %}
+
+        {% endblock %}
+
+    </head>
+<body>
+    <div class="sidebar">
+        <div class="logo-details">
+          <i class='bx bxl-c-plus-plus'></i>
+          <span class="logo_name">校园疫情管理系统U</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/users/base_user/index/">
+                  <i class='bx bx-grid-alt' ></i>
+                  <span class="link_name">主页</span>
+                </a>
+{#                <ul class="sub-menu blank">#}
+{#                    <li><a class="link_name" href="#">Category</a></li>#}
+{#                </ul>#}
+            </li>
+
+            <li>
+                <div class="iocn-link">
+                    <a href="/users/base_user/china_data/">
+                        <i class='bx bx-line-chart' ></i>
+                        <span class="link_name">疫情数据</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow' ></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a href="/users/base_user/hubei_data/">湖北省数据</a></li>
+                    <li><a href="/users/base_user/china_data/">全国数据</a></li>
+                    <li><a href="/users/base_user/world_data/">世界数据</a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <div class="iocn-link">
+                    <a href="/users/base_user/notice_all/">
+                        <i class='bx bx-pie-chart-alt-2' ></i>
+                        <span class="link_name">疫情通告</span>
+                    </a>
+                </div>
+            </li>
+
+            <li>
+                <div class="iocn-link">
+                    <a href="/users/base_user/fill_add/">
+                        <i class='bx bx-plug' ></i>
+                        <span class="link_name">健康打卡</span>
+                    </a>
+                </div>
+            </li>
+
+            <li>
+                <div class="iocn-link">
+                    <a href="/users/base_user/itin_add/">
+                        <i class='bx bx-compass' ></i>
+                        <span class="link_name">行程打卡</span>
+                    </a>
+                </div>
+            </li>
+
+            <li>
+                <div class="iocn-link">
+                    <a href="/users/base_user/user_edit/">
+                        <i class='bx bx-cog'></i>
+                        <span class="link_name">个人中心</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow' ></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a class="link_name" href="#">Plugins</a></li>
+                    <li><a href="/users/base_user/user_pwd/">修改密码</a></li>
+                    <li><a href="/users/base_user/user_edit/">资料编辑</a></li>
+                </ul>
+            </li>
+
+
+
+            <li>
+                <div class="profile-details">
+                    <div class="profile-content">
+{#                        <img src="{% static "img/bk.jpg" %}" alt="profile">#}
+                        <img src="{% static avatar %}" alt="profile">
+                    </div>
+                    <div class="name-job">
+                        <div class="profile_name">用户</div>
+                        <div class="job">{{ uu }}</div>
+                    </div>
+                        <a href="/users/login/"><i class='bx bx-log-out' ></i></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="home-section">
+        <div class="nav">
+            <div class="nav_left">
+                {% block nav %}
+
+                {% endblock %}
+            </div>
+            <link href="{% static "css/search.css" %}" rel="stylesheet" type="text/css"/>
+        <form target="_blank" method="get" action="https://www.baidu.com/s" class="search">
+            <input type="search" name="word" class="text" pattern=".*\S.*" placeholder="  Search..." required>
+            <button class="search-btn" type="submit">
+                <span>搜索</span>
+            </button>
+        </form>
+
+        </div>
+        <div class="main">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+
+
+    </div>
+
+
+    <script>
+        let arrow = document.querySelectorAll(".arrow");
+        for (var i = 0; i < arrow.length; i++) {
+            arrow[i].addEventListener("click", (e)=>{
+            let arrowParent = e.target.parentElement.parentElement;
+            arrowParent.classList.toggle("showMenu");
+        });
+        }
+
+        let sidebar = document.querySelector(".sidebar");
+        let sidebarBtn = document.querySelector(".bx-menu");
+        console.log(sidebarBtn);
+        sidebarBtn.addEventListener("click", ()=>{
+            sidebar.classList.toggle("close");
+        });
+    </script>
+
+</body>
+</html>

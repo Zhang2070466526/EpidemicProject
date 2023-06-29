@@ -1,0 +1,262 @@
+{% extends 'base_user.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        .main{
+            width:100%;
+            height:100%;
+            {#background-color: #ffc107;#}
+            display: flex;
+        }
+        .left{
+            flex:3;
+            {#background-color: #03e9f4;#}
+        }
+        .right{
+            flex:2;
+            display: flex;
+            flex-direction: column;
+        }
+        #echarts2{
+            flex: 1;
+            {#background-color: #0f5132;#}
+        }
+        #echarts3{
+            flex: 1;
+
+        }
+
+
+    </style>
+{% endblock %}
+{% block js %}
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/echarts.min.js" %}"></script>
+{% endblock %}
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 3%}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block content %}
+<div class="main">
+    <div id="echarts1" class="left"></div>
+    <div class="right">
+        <div id="echarts2">1</div>
+        <div id="echarts3"></div>
+
+    </div>
+
+
+</div>
+
+    <script>
+        var myCharts2 = echarts.init(document.getElementById('echarts2'));  //饼图
+        var option2= {
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                textStyle: {
+                    color:'rgba(255,255,255,0.8)'
+                }
+            },
+            toolbox: {
+                show: true,
+                    feature: {
+                    saveAsImage:{},//保存图片
+                    dataView:{readOnly: false},//数据视图   属性为是否只读(是否不可编辑)
+                    restore:{},//数据还原(当使用dataView工具时,可以还原数据,即刷新)
+                    mark:{}
+                },
+            },
+            series: [
+                {
+                    name: 'Nightingale Chart',
+                    type: 'pie',
+                    label:{//饼图文字
+                    show:true,//默认是true,显示文字
+                    formatter:function(arg){
+                        return arg.name+arg.value+"\n占了"+arg.percent+"%"
+                    }
+                    },
+                    data:{{ domesticData|safe }}
+                }
+            ],
+            roseType:'area'
+        };
+        myCharts2.setOption(option2);
+
+        var topData={{ topData|safe }}
+        var myCharts3=echarts.init(document.getElementById("echarts3"))
+        var option3 = {
+            title: {
+                text: '一周内Top7省份疫情数据',
+                textStyle:{
+                    fontSize:20,
+                    color:"red"//主标题颜色
+                },
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: {{ topProvince|safe }},
+                top:'30px',
+                textStyle: {
+                    color:'rgba(181,221,245,0.8)'
+                }
+            },
+            grid: {
+                left: '0%',
+                right: '2%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: [
+                {
+                show: true,//虽然默认是显示,但是不写时,数据视图更改后不会有变化
+                    {#bottom:'10%',#}
+                left:'70%',
+                orient:'horizontal',//布局朝向
+                feature: {
+                    saveAsImage:{},//保存图片
+                    dataView:{readOnly: false},//数据视图   属性为是否只读(是否不可编辑)
+                    restore:{},//数据还原(当使用dataView工具时,可以还原数据,即刷新)
+                    magicType:{
+                        type:['line',"bar"]
+                        },//动态图表类型切换 转换为line折线图 stack堆叠模式
+                    },
+                },
+
+            ],
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,//是否紧挨边缘,默认值是true不紧挨边缘(有边界间隙)
+                data: {{ ls_date|safe }},
+                axisLabel: {
+                    rotate:1,
+                }
+            },
+            yAxis: {
+                type: 'value',
+                scale:true,//不从0值比例开始
+                axisLabel:{
+                    rotate:38,
+                    margin:9,
+                }
+            },
+            series: [
+                {
+                    name: {{ topProvince|safe }}[0],
+                    type: 'line',
+                    stack: 'Total',
+                    data: topData[0]
+                },
+                {
+                    name: {{ topProvince|safe }}[1],
+                    type: 'line',
+                    stack: 'Total',
+                    data: topData[1]
+                },
+                {
+                    name: {{ topProvince|safe }}[2],
+                    type: 'line',
+                    stack: 'Total',
+                    data: topData[2]
+                },
+                {
+                    name: {{ topProvince|safe }}[3],
+                    type: 'line',
+                    stack: 'Total',
+                    data: topData[3]
+                },
+                {
+                    name: {{ topProvince|safe }}[4],
+                    type: 'line',
+                    stack: 'Total',
+                    data: topData[4]
+                },
+                {
+                    name: {{ topProvince|safe }}[5],
+                    type: 'line',
+                    stack: 'Total',
+                    data: topData[5]
+                },,
+                {
+                    name: {{ topProvince|safe }}[6],
+                    type: 'line',
+                    stack: 'Total',
+                    data: topData[6]
+                }
+            ]
+        };
+        myCharts3.setOption(option3)
+
+
+
+
+        var chinaData={{ chData|safe }}
+        $.get("{% static "mapData/china.json" %}",function(ret){
+            echarts.registerMap("China",ret)
+            var myCharts=echarts.init(document.getElementById('echarts1'))
+            var option={
+                title:{
+                    text:"全国疫情数据",
+                    textStyle:{
+                        color:'red',
+                        fontSize:25,
+
+                    },
+                    left:"center",
+                },
+                geo:{
+                    type:'map',
+                    map:"China",
+                    roam:true,
+                    zoom:1.25,
+                    label:{
+                        show:true
+                    },
+                    center:[103.996902,37.499972],
+                },
+                series:[
+                    {
+                        data:chinaData,
+                        geoIndex:0,//将array的数据与第一(索引为0)个geo配置关联
+                        type:"map",
+                    },
+                ],
+                visualMap:{
+                    min:0,
+                    max:30000,
+                    inRange:{
+                        color:["silver",'lavender',"cornflowerblue","royalblue","slateblue","blue","mediumblue","darkblue","navy"]
+                    },
+                    calculable:true//滑块
+                }
+            }
+            myCharts.setOption(option)
+            window.onresize=myCharts.resize
+        })
+
+
+
+        window.onresize=myCharts2.resize
+        window.onresize=myCharts3.resize
+
+
+
+        //window.addEventListener("resize",function(){
+           //myCharts.resize();
+           //myCharts2.resize();
+           //myCharts3.resize();
+        //});
+
+
+    </script>
+
+{% endblock %}

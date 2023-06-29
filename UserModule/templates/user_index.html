@@ -1,0 +1,503 @@
+{% extends 'base_user.html' %}
+{% load static %}
+
+{% block css %}
+
+{#    <link href="{% static "css/bootstrap5.min.css" %}" rel="stylesheet" type="text/css"/>#}
+{#    <link href="{% static "css/manage_list.css" %}" rel="stylesheet" type="text/css"/>#}
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">#}
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='https://unpkg.com/bee-swiper/dist/bee-swiper.css'>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <style>
+        .main{
+            display: flex;
+            flex-direction: column;
+        }
+        .main_top{
+            flex:1;
+            display: flex;
+        }
+        .main_top .one{
+            flex:1;
+            border: 2px solid white;
+            border-radius: 24px;
+            margin-right: 15px;
+            margin-left:5px;
+            display: flex;
+            flex-direction: row;
+        }
+        .main_top .two{
+            flex:1;
+            border: 2px solid white;
+            border-radius: 24px;
+            margin-right: 15px;
+            display: flex;
+            flex-direction: row;
+        }
+        .main_top .six{
+            flex:1;
+            border: 2px solid white;
+            border-radius: 24px;
+            margin-right: 5px;
+            display: flex;
+            flex-direction: row;
+        }
+
+
+         .le{
+            flex:2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ri{
+            flex:5;
+            display: flex;
+            flex-direction:column ;
+        }
+        .title{
+            flex:1;
+            text-align: center;
+        }
+         .num{
+            flex:9;
+            font-size: 25px;
+            padding-left:80px;
+        }
+
+
+
+
+        .main_main{
+            flex:10;
+            display: flex;
+            margin-top: 6px;
+        }
+        .main_main .left{
+            flex:2;
+            border: 2px solid red;
+            border-radius: 24px;
+            margin-right: 10px;
+            {#background-color:#5bc0de;#}
+            display: flex;
+            flex-direction: column;
+        }
+        .main_main .middle{
+            flex:3;
+            border: 2px solid red;
+            border-radius: 24px;
+        }
+        .banner-container{
+            flex:1;
+            {#background-color: #2c0b0e;#}
+        }
+        .banner-slide{
+            border-radius: 24px;
+        }
+        .bottom{
+            flex:1;
+            font-size: 80px;
+
+
+        }
+
+         #map {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            border: 2px solid red;
+            border-radius: 24px;
+        }
+        .demo-title {
+          position: absolute;
+          {#top: 25px;#}
+          {#left: 25px;#}
+            margin-left: 10px;
+          z-index: 1;
+        }
+
+        h1 {
+          font-size: 18px;
+          margin: 0;
+          color: rgb(180, 180, 190);
+        }
+
+        h3 {
+          font-size: 12px;
+          font-weight: normal;
+          margin-top: 5px;
+          color: rgb(150,150,150);
+        }
+
+    </style>
+
+{% endblock %}
+
+
+
+
+{% block js %}
+    <script src="{% static 'js/jquery.min.js'%}"></script>
+    <script src="{% static "js/bootstrap5.min.js"%}"></script>
+    <script src="{% static 'js/axios.min.js'%}"></script>
+    <script src="{% static 'js/vue.min.js'%}"></script>
+    <script src="{% static "js/echarts.min.js" %}"></script>
+    <script src='https://unpkg.com/bee-swiper/dist/bee-swiper.js'></script>
+
+    <script src="https://webapi.amap.com/maps?v=2.0&key=208cf3675c7032afaf3e77ba66ce0fba"></script>
+    <script src="https://webapi.amap.com/loca?v=2.0.0&key=208cf3675c7032afaf3e77ba66ce0fba"></script>
+{#    <script src="https://webapi.amap.com/maps?v=2.0&key=208cf3675c7032afaf3e77ba66ce0fba&plugin=AMap.ToolBar,AMap.Driving,AMap.Scale,AMap.Geolocation,AMap.HawkEye"></script>#}
+{% endblock %}
+
+
+
+{% block nav %}
+    {% for i in nav_html %}
+         {% if i.index < 1%}
+            <a href="{{ i.url }}">{{i.title}}</a>  >
+         {% else %}
+            <a href="{{ i.url }}">{{i.title}}</a>
+         {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block content%}
+    <div class="main">
+        <div class="main_top">
+            <div class="one">
+                <div class="le"><i class="fa fa-user-circle fa-2x"></i></div>
+                <div class="ri">
+                    <div class="title">用户总数</div>
+                    <div class="num">{{ User_count }}</div>
+                </div>
+            </div>
+            <div class="two">
+                <div class="le"><i class="fa fa-male fa-2x"></i></div>
+                <div class="ri">
+                    <div class="title">学生总数</div>
+                    <div class="num">{{ Student_count }}</div>
+                </div>
+            </div>
+            <div class="two">
+                <div class="le"><i class="fa fa-heart fa-2x"></i></div>
+                <div class="ri">
+                    <div class="title">今日核酸检测人数</div>
+                    <div class="num">{{ Filling_count }}</div>
+                </div>
+            </div>
+            <div class="two">
+                <div class="le"><i class="fa fa-heartbeat fa-2x"></i></div>
+                <div class="ri">
+                    <div class="title">今日异常人数</div>
+                    <div class="num">{{ Filling_abnormal_count }}</div>
+                </div>
+            </div>
+            <div class="two">
+                <div class="le"><i class="fa fa-home fa-fw fa-2x"></i></div>
+                <div class="ri">
+                    <div class="title">今日返校人数</div>
+                    <div class="num">{{ Itinerary_today_count }}</div>
+                </div>
+            </div>
+            <div class="six">
+                <div class="le"><i class="fa fa-align-center fa-2x"></i></div>
+                <div class="ri">
+                    <div class="title">疫情通告</div>
+                    <div class="num">{{ Notice_count }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_main">
+            <div class="left">
+                <div class="banner-container">
+                  <div class="banner-wrapper">
+                    <a class="banner-slide" href="https://images.unsplash.com/photo-1489782419474-4d4221dc5b10?dpr=2&auto=compress,format&fit=crop&w=360&h=240&q=80&cs=tinysrgb&crop=&bg="
+                       style='background-image: url("https://images.unsplash.com/photo-1489782419474-4d4221dc5b10?dpr=2&auto=compress,format&fit=crop&w=360&h=240&q=80&cs=tinysrgb&crop=&bg=")'>
+                    </a>
+                    <a class="banner-slide" href="https://images.unsplash.com/photo-1487621167305-5d248087c724?dpr=2&auto=compress,format&fit=crop&w=360&h=203&q=80&cs=tinysrgb&crop=&bg="
+                       style='background-image: url("https://images.unsplash.com/photo-1487621167305-5d248087c724?dpr=2&auto=compress,format&fit=crop&w=360&h=203&q=80&cs=tinysrgb&crop=&bg=")'>
+                    </a>
+                    <a class="banner-slide" href="https://images.unsplash.com/photo-1494565108644-2af890493b92?dpr=2&auto=compress,format&fit=crop&w=360&h=240&q=80&cs=tinysrgb&crop=&bg="
+                       style='background-image: url("https://images.unsplash.com/photo-1494565108644-2af890493b92?dpr=2&auto=compress,format&fit=crop&w=360&h=240&q=80&cs=tinysrgb&crop=&bg=")'>
+                    </a>
+                    <a class="banner-slide" href="https://images.unsplash.com/photo-1494552116038-f27911101ffa?dpr=2&auto=compress,format&fit=crop&w=360&h=240&q=80&cs=tinysrgb&crop=&bg="
+                       style='background-image: url("https://images.unsplash.com/photo-1494552116038-f27911101ffa?dpr=2&auto=compress,format&fit=crop&w=360&h=240&q=80&cs=tinysrgb&crop=&bg=")'>
+                    </a>
+                    <a class="banner-slide" href="https://images.unsplash.com/photo-1493666835815-de6b83927e24?dpr=2&auto=compress,format&fit=crop&w=360&h=238&q=80&cs=tinysrgb&crop=&bg="
+                       style='background-image: url("https://images.unsplash.com/photo-1493666835815-de6b83927e24?dpr=2&auto=compress,format&fit=crop&w=360&h=238&q=80&cs=tinysrgb&crop=&bg=")'>
+                    </a>
+                  </div>
+                </div>
+                <div class="bottom" id='echarts1'></div>
+            </div>
+            <div class="middle" id="map">
+                <div class="demo-title">
+                      <h1>3D热力—全国疫情数据指数热度</h1>
+                      <h3>热力全国各城市的今日累计新增</h3>
+                </div>
+                <script>
+                  var map = new AMap.Map('map', {
+                    zooms: [4, 7],
+                    zoom: 4.75,//初始化地图层级
+                    center: [116.618687,31.790976],//初始化地图中心点
+                    showLabel: false,
+                    viewMode: '3D',//是地图渲染的模式，2D：平面模式，3D：带有俯仰角的 3D 模式
+                    {#mapStyle: 'amap://styles/45311ae996a8bea0da10ad5151f72979',//地图主题样式#}
+                    mapStyle: 'amap://styles/darkblue', //设置地图的显示样式
+                    pitch: 40,
+                  });
+                  AMap.plugin([
+                      'AMap.ToolBar',
+                      'AMap.Scale',
+                      'AMap.HawkEye',
+                      'AMap.MapType',
+                      'AMap.Geolocation',
+                      'AMap.ControlBar',  //组合了旋转、倾斜、复位在内的地图控件。
+                  ], function(){
+                      // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+                      map.addControl(new AMap.ToolBar({
+                         position: 'RB', // 将工具条控件放置在地图 L:左 R：右  B:下  T:上
+                         offset:[18, 60] // 将工具条控件向左上方偏移n个像素
+                      }));
+                      // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+                      map.addControl(new AMap.Scale());
+                      // 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
+                      map.addControl(new AMap.HawkEye({isOpen:true,mapStyle:'amap://styles/darkblue'}));
+                      // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+                      map.addControl(new AMap.MapType({
+                         position: 'RT', // 将工具条控件放置在地图 L:左 R：右  B:下  T:上
+                         offset:[0, 95] // 将工具条控件向左上方偏移n个像素
+                      }));
+                      // 在图面添加定位控件，用来获取和展示用户主机所在的经纬度位置
+                      map.addControl(new AMap.Geolocation());
+                      //组合了旋转、倾斜、复位在内的地图控件。
+                      map.addControl(new AMap.ControlBar({
+                         position: 'RT', // 将工具条控件放置在地图 L:左 R：右  B:下  T:上
+                      }));
+                  });
+
+
+
+                  var loca = new Loca.Container({
+                    map,
+                  });
+
+                  var geo = new Loca.GeoJSONSource({
+                    // url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/traffic.json',
+                    url:"{% static 'epid_json.json'%}",
+                  });
+
+                  var heatmap = new Loca.HeatMapLayer({
+                    // loca,
+                    zIndex: 10,     //图层显示层级
+                    opacity: 1,    // 图层整体透明度
+                    visible: true,   // 图层是否可见
+                    zooms: [2, 22],  // 图层缩放等级范围
+                  });
+
+                  heatmap.setSource(geo, {    //给图层设置数据源，支持 geojson 和 geobuffer 两种类型的数据源
+                    radius: 200000,
+                    unit: 'meter',
+                    height: 500000,
+                    //radius: 35,
+                    //unit: 'px',
+                    //height: 100,
+                    gradient: {
+                      0.1: '#2A85B8',
+                      0.2: '#16B0A9',
+                      0.3: '#29CF6F',
+                      0.4: '#5CE182',
+                      0.5: '#7DF675',
+                      0.6: '#FFF100',
+                      0.7: '#FAA53F',
+                      1: '#D04343',
+                    },
+                    value: function (index, feature) {
+                      return feature.properties.avg;
+                      var value = feature.properties.mom.slice(0, -1);
+                      return value + 10 * Math.random();
+                    },
+                    // min: -100,
+                    // max: 100,
+                    heightBezier: [0, .53, .37, .98],
+                  });
+                  loca.add(heatmap);
+
+                  map.on('complete', function () {
+                    heatmap.addAnimate({
+                      key: 'height',
+                      value: [0, 1],
+                      duration: 2000,
+                      easing: 'BackOut',
+                      // yoyo: true,
+                      // repeat: 2,
+                    });
+                    heatmap.addAnimate({
+                      key: 'radius',
+                      value: [0, 1],
+                      duration: 2000,
+                      easing: 'BackOut',
+                      // 开启随机动画
+                      transform: 1000,
+                      random: true,
+                      delay: 5000,
+                    });
+                  });
+                  map.on('click', function (e) {
+                    var feat = heatmap.queryFeature(e.pixel.toArray());
+                    if(feat){
+                      map.clearMap();
+                      map.add(new AMap.Marker({
+                        position:feat.lnglat,
+                        anchor: 'bottom-center',
+                        content: '<div style="margin-bottom: 15px; border:1px solid #fff; border-radius: 4px;color: #fff; width: 150px; text-align: center;">热力值: '+ feat.value.toFixed(2) +'</div>'
+                      }));
+                    }
+                  });
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const firstDay = new Date(today.setDate(today.getDate() - dayOfWeek));
+        const weekDays = [];
+        for (let i = 0; i < 7; i++) {
+          const day = new Date(firstDay);
+          day.setDate(firstDay.getDate() - i);
+          const dayString = day.toISOString().substring(0, 10);
+          weekDays.push(dayString);
+        }
+        console.log(weekDays);
+        {#weekDays.reverse()#}
+
+
+        var myCharts= echarts.init(document.getElementById('echarts1'));
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  // Use axis to trigger tooltip
+                  type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                }
+              },
+            legend: {
+                {#data:["用户总数","学生总数",'今日核酸检测人数','今日出现异常人数','今日返校人数','疫情通告']#}
+                type: 'scroll',  //可滚动翻页的图例。当图例数量较多时可以使用。
+                top: 10,
+                left:10,
+                right:10,
+                data:["用户总数","学生总数",'今日核酸检测人数','今日出现异常人数','今日返校人数','疫情通告'],
+                textStyle: {
+                    color: "rgba(255, 255, 255, 1)"
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value'
+            },
+            yAxis: {
+                type: 'category',
+                data: weekDays
+            },
+            series: [
+                {
+                      name: '用户总数',
+                      type: 'bar',
+                      stack: 'total',
+                      label: {
+                        show: true
+                      },
+                      emphasis: {
+                        focus: 'series'
+                      },
+                      data: {{user_list|safe}}
+                },
+                {
+                  name: '学生总数',
+                  type: 'bar',
+                  stack: 'total',
+                  label: {
+                    show: true
+                  },
+                  emphasis: {
+                    focus: 'series'
+                  },
+                  data: {{ student_list|safe}}
+                },
+                {
+                  name: '今日核酸检测人数',
+                  type: 'bar',
+                  stack: 'total',
+                  label: {
+                    show: true
+                  },
+                  emphasis: {
+                    focus: 'series'
+                  },
+                  data: {{ filling_list|safe}}
+                },
+                {
+                  name: '今日出现异常人数',
+                  type: 'bar',
+                  stack: 'total',
+                  label: {
+                    show: true
+                  },
+                  emphasis: {
+                    focus: 'series'
+                  },
+                  data:{{ filling_abnormal_list|safe}}
+
+                },
+                {
+                  name: '今日返校人数',
+                  type: 'bar',
+                  stack: 'total',
+                  label: {
+                    show: true
+                  },
+                  emphasis: {
+                    focus: 'series'
+                  },
+                  data:{{itinerary_list|safe}}
+
+                },
+                {
+                  name: '疫情通告',
+                  type: 'bar',
+                  stack: 'total',
+                  label: {
+                    show: true
+                  },
+                  emphasis: {
+                    focus: 'series'
+                  },
+                  data: {{notice_list|safe}}
+                }
+              ]
+            };
+        myCharts.setOption(option);
+
+    </script>
+
+    <script  src="{% static 'js/script.js'%}"></script>
+
+
+
+{% endblock %}
+
+
+
+
+
